@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-reference/decisions" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.2">
+<title data-rh="true">Design decisions | Study Orbit Server</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://chucjq.github.io/study-orbit-server/reference/decisions"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Design decisions | Study Orbit Server"><meta data-rh="true" name="description" content="The main decisions behind the server, what each one chose, and why, in the order they were made."><meta data-rh="true" property="og:description" content="The main decisions behind the server, what each one chose, and why, in the order they were made."><link data-rh="true" rel="icon" href="/study-orbit-server/img/favicon.svg"><link data-rh="true" rel="canonical" href="https://chucjq.github.io/study-orbit-server/reference/decisions"><link data-rh="true" rel="alternate" href="https://chucjq.github.io/study-orbit-server/reference/decisions" hreflang="en"><link data-rh="true" rel="alternate" href="https://chucjq.github.io/study-orbit-server/reference/decisions" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Design decisions","item":"https://chucjq.github.io/study-orbit-server/reference/decisions"}]}</script><link rel="stylesheet" href="/study-orbit-server/assets/css/styles.85c4bc93.css">
+<script src="/study-orbit-server/assets/js/runtime~main.6b798702.js" defer="defer"></script>
+<script src="/study-orbit-server/assets/js/main.1cb51e47.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/study-orbit-server/"><b class="navbar__title text--truncate">Study Orbit Server</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/study-orbit-server/">Docs</a><a class="navbar__item navbar__link" href="/study-orbit-server/api/overview">API</a><a class="navbar__item navbar__link" href="/study-orbit-server/architecture/overview">Architecture</a><a class="navbar__item navbar__link" href="/study-orbit-server/reference/errors">Errors</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/study-orbit-server/"><span class="linkLabel_WmDU">Study Orbit Server</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" href="/study-orbit-server/getting-started/setup"><span class="categoryLinkLabel_W154">Getting started</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/study-orbit-server/getting-started/setup"><span class="linkLabel_WmDU">Setup</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/study-orbit-server/architecture/overview"><span class="categoryLinkLabel_W154">Architecture</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/study-orbit-server/api/overview"><span class="categoryLinkLabel_W154">API reference</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/study-orbit-server/guides/review-walkthrough"><span class="categoryLinkLabel_W154">Guides</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/study-orbit-server/reference/errors"><span class="categoryLinkLabel_W154">Reference</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/study-orbit-server/reference/errors"><span class="linkLabel_WmDU">Errors</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/study-orbit-server/reference/decisions"><span class="linkLabel_WmDU">Design decisions</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/study-orbit-server/reference/limitations"><span class="linkLabel_WmDU">Known limitations</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/study-orbit-server/reference/glossary"><span class="linkLabel_WmDU">Glossary</span></a></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/study-orbit-server/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Reference</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Design decisions</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Design decisions</h1></header>
+<p>This page records the decisions made for the backend and the reasons behind them. Each one answers a question a future contributor is likely to ask, such as why the scheduler is written from scratch or why reviews cannot be deleted. They are kept here so that the reasoning behind the design stays available to anyone who works on the code later.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>Topic</th><th>Decision</th><th>Reason</th></tr></thead><tbody><tr><td>1</td><td>Algorithm</td><td>Implement SM-2 in-house in one function, <code>schedule(card, rating, now)</code>.</td><td>The function is pure, so it can be unit tested, and the rule set is small enough to explain in full.</td></tr><tr><td>2</td><td>Rating scale</td><td>The API accepts <code>again</code>, <code>hard</code>, <code>good</code> and <code>easy</code>, which map to SM-2 grades 1, 3, 4 and 5.</td><td>Four words are clearer to a learner than a numeric scale, and the mapping stays in one place.</td></tr><tr><td>3</td><td>Due granularity</td><td>Due dates are start-of-day UTC values. &quot;Due today&quot; means on or before the end of the UTC day.</td><td>Whole-day scheduling is simple to reason about and to test.</td></tr><tr><td>4</td><td>Strong typing</td><td>Strict TypeScript, no explicit <code>any</code>, typed models, typed environment and validated request data read through one accessor.</td><td>Type errors are caught before runtime, and the rule is checked by the linter and the type checker.</td></tr><tr><td>5</td><td>Data model</td><td>Five collections: subjects, decks, cards, reviews and sessions.</td><td>A clear hierarchy with a history collection and a grouping collection, each with a distinct job.</td></tr><tr><td>6</td><td>Validation</td><td>Zod at the HTTP boundary and Mongoose rules at the persistence boundary, both returning <code>400</code>.</td><td>Shape errors and data rules fail at different layers, and both should give the same response format.</td></tr><tr><td>7</td><td>One definition of due</td><td>One shared helper provides the due buckets for every endpoint.</td><td>Two screens that disagree about what is due would undermine trust in the app.</td></tr><tr><td>8</td><td>Ease rounding</td><td>The ease factor is rounded to two decimals after every update.</td><td>Stored values stay clean and comparable in tests.</td></tr><tr><td>9</td><td>List envelope</td><td>Every list returns <code>data</code>, <code>total</code>, <code>page</code> and <code>limit</code>.</td><td>The client needs one list type. The statistics endpoints are the documented exception.</td></tr><tr><td>10</td><td>Sessions</td><td>Several active sessions per deck are allowed. Only completed sessions count in statistics.</td><td>Closing a tab abandons a session without blocking the next one.</td></tr><tr><td>11</td><td>Uniqueness</td><td>Subject names are unique. Deck titles are unique within a subject. Both are case-insensitive.</td><td>Duplicates would make the selection of subjects and decks ambiguous.</td></tr><tr><td>12</td><td>Append-only history</td><td>There is no endpoint to edit or delete a review.</td><td>Editing a review would change the new-card limit, retention and streaks without reverting the card.</td></tr><tr><td>13</td><td>Transactions</td><td>Cascade deletes and the review write run in MongoDB transactions.</td><td>A failure must not leave orphaned reviews or half-updated cards.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="decisions-that-trade-simplicity-for-accuracy">Decisions that trade simplicity for accuracy<a href="#decisions-that-trade-simplicity-for-accuracy" class="hash-link" aria-label="Direct link to Decisions that trade simplicity for accuracy" title="Direct link to Decisions that trade simplicity for accuracy" translate="no">​</a></h2>
+<p>Some decisions accept a known imperfection in exchange for simplicity. Decision 3 means a learner in a distant time zone can see a card as due a few hours early or late. Decision 2&#x27;s whole-day scheduling means a card rated <code>again</code> cannot be repeated the same day through the API. Both are listed in <a class="" href="/study-orbit-server/reference/limitations">Known limitations</a>, together with the reasons they were accepted.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="out-of-scope-by-design">Out of scope by design<a href="#out-of-scope-by-design" class="hash-link" aria-label="Direct link to Out of scope by design" title="Direct link to Out of scope by design" translate="no">​</a></h2>
+<p>The backend deliberately leaves several things out: a frontend, authentication and per-user data, deployment, file uploads, and alternative schedulers such as FSRS. The <code>schedule</code> function is the swap point if another scheduler is added later, because nothing else in the code depends on how the interval is computed.</p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/study-orbit-server/reference/errors"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Errors</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/study-orbit-server/reference/limitations"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Known limitations</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#decisions-that-trade-simplicity-for-accuracy" class="table-of-contents__link toc-highlight">Decisions that trade simplicity for accuracy</a></li><li><a href="#out-of-scope-by-design" class="table-of-contents__link toc-highlight">Out of scope by design</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Start here</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/study-orbit-server/getting-started/setup">Setup</a></li><li class="footer__item"><a class="footer__link-item" href="/study-orbit-server/api/overview">API reference</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Design</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/study-orbit-server/architecture/data-model">Data model</a></li><li class="footer__item"><a class="footer__link-item" href="/study-orbit-server/architecture/scheduling">Scheduling (SM-2)</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Study Orbit server documentation. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
