@@ -1,0 +1,1104 @@
+{
+  "info": {
+    "name": "Study Orbit API",
+    "description": "All 31 endpoints of the Study Orbit backend, in the order they run. Run the folders top to bottom: each request saves the ids it creates for the next one. Error folders show the 400 and 404 responses.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "subjectId",
+      "value": ""
+    },
+    {
+      "key": "scratchSubjectId",
+      "value": ""
+    },
+    {
+      "key": "deckId",
+      "value": ""
+    },
+    {
+      "key": "scratchDeckId",
+      "value": ""
+    },
+    {
+      "key": "cardId",
+      "value": ""
+    },
+    {
+      "key": "card2Id",
+      "value": ""
+    },
+    {
+      "key": "scratchCardId",
+      "value": ""
+    },
+    {
+      "key": "sessionId",
+      "value": ""
+    },
+    {
+      "key": "reviewId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Subjects",
+      "item": [
+        {
+          "name": "Create subject",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"subjectId\", pm.response.json()._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Biology {{$randomInt}}\",\n  \"color\": \"#22c55e\",\n  \"icon\": \"🧬\"\n}"
+            },
+            "url": "{{baseUrl}}/api/subjects"
+          }
+        },
+        {
+          "name": "List subjects",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"list envelope\", () => pm.expect(pm.response.json()).to.have.keys(\"data\", \"total\", \"page\", \"limit\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/subjects"
+          }
+        },
+        {
+          "name": "Get subject",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/subjects/{{subjectId}}"
+          }
+        },
+        {
+          "name": "Update subject",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Biology and Chemistry {{$randomInt}}\",\n  \"color\": \"#16a34a\"\n}"
+            },
+            "url": "{{baseUrl}}/api/subjects/{{subjectId}}"
+          }
+        },
+        {
+          "name": "Create scratch subject",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"scratchSubjectId\", pm.response.json()._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Scratch {{$randomInt}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/subjects"
+          }
+        },
+        {
+          "name": "Delete scratch subject (no decks)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/subjects/{{scratchSubjectId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Decks",
+      "item": [
+        {
+          "name": "Create deck",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"deckId\", pm.response.json()._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Cell structure {{$randomInt}}\",\n  \"subject\": \"{{subjectId}}\",\n  \"description\": \"Organelles and membranes\",\n  \"color\": \"#0ea5e9\",\n  \"dailyNewLimit\": 5\n}"
+            },
+            "url": "{{baseUrl}}/api/decks"
+          }
+        },
+        {
+          "name": "Create scratch deck",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"scratchDeckId\", pm.response.json()._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Scratch deck {{$randomInt}}\",\n  \"subject\": \"{{subjectId}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/decks"
+          }
+        },
+        {
+          "name": "List decks",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/decks"
+          }
+        },
+        {
+          "name": "Get deck",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/decks/{{deckId}}"
+          }
+        },
+        {
+          "name": "List cards in deck",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/decks/{{deckId}}/cards"
+          }
+        },
+        {
+          "name": "Update deck",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Cell structure and function {{$randomInt}}\",\n  \"subject\": \"{{subjectId}}\",\n  \"dailyNewLimit\": 8\n}"
+            },
+            "url": "{{baseUrl}}/api/decks/{{deckId}}"
+          }
+        },
+        {
+          "name": "Delete scratch deck",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/decks/{{scratchDeckId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cards",
+      "item": [
+        {
+          "name": "Create card",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"cardId\", pm.response.json()._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deck\": \"{{deckId}}\",\n  \"front\": \"What is the powerhouse of the cell?\",\n  \"back\": \"The mitochondrion\",\n  \"tags\": [\n    \"organelles\"\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/api/cards"
+          }
+        },
+        {
+          "name": "Create second card",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"card2Id\", pm.response.json()._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deck\": \"{{deckId}}\",\n  \"front\": \"What does ATP stand for?\",\n  \"back\": \"Adenosine triphosphate\"\n}"
+            },
+            "url": "{{baseUrl}}/api/cards"
+          }
+        },
+        {
+          "name": "Create scratch card",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"scratchCardId\", pm.response.json()._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deck\": \"{{deckId}}\",\n  \"front\": \"Scratch front\",\n  \"back\": \"Scratch back\"\n}"
+            },
+            "url": "{{baseUrl}}/api/cards"
+          }
+        },
+        {
+          "name": "List new cards",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/cards?status=new&sort=createdAt"
+          }
+        },
+        {
+          "name": "Get card",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/cards/{{cardId}}"
+          }
+        },
+        {
+          "name": "Update card",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deck\": \"{{deckId}}\",\n  \"front\": \"What is the powerhouse of the cell? (edited)\",\n  \"back\": \"The mitochondrion\",\n  \"tags\": [\n    \"organelles\",\n    \"energy\"\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/api/cards/{{cardId}}"
+          }
+        },
+        {
+          "name": "Suspend card",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"suspended\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/cards/{{card2Id}}/suspension"
+          }
+        },
+        {
+          "name": "Unsuspend card",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"suspended\": false\n}"
+            },
+            "url": "{{baseUrl}}/api/cards/{{card2Id}}/suspension"
+          }
+        },
+        {
+          "name": "Delete scratch card",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/cards/{{scratchCardId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Study and sessions",
+      "item": [
+        {
+          "name": "Study queue",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"has counts\", () => pm.expect(pm.response.json().counts).to.have.keys(\"due\", \"new\", \"total\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/study/queue?limit=10"
+          }
+        },
+        {
+          "name": "Start session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"sessionId\", pm.response.json()._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deck\": \"{{deckId}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/sessions"
+          }
+        },
+        {
+          "name": "List active sessions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/sessions?status=active"
+          }
+        },
+        {
+          "name": "Get session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/sessions/{{sessionId}}"
+          }
+        },
+        {
+          "name": "Review card (good)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"reviewId\", pm.response.json().review._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": \"good\",\n  \"timeSpentMs\": 4200,\n  \"session\": \"{{sessionId}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/cards/{{cardId}}/reviews"
+          }
+        },
+        {
+          "name": "Review second card (again)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": \"again\",\n  \"timeSpentMs\": 9800,\n  \"session\": \"{{sessionId}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/cards/{{card2Id}}/reviews"
+          }
+        },
+        {
+          "name": "Finish session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\"\n}"
+            },
+            "url": "{{baseUrl}}/api/sessions/{{sessionId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "List reviews",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/reviews?limit=10"
+          }
+        },
+        {
+          "name": "Get review",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/reviews/{{reviewId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stats",
+      "item": [
+        {
+          "name": "Overview",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/stats/overview"
+          }
+        },
+        {
+          "name": "Deck stats",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/stats/decks/{{deckId}}"
+          }
+        },
+        {
+          "name": "Subject stats",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/stats/subjects"
+          }
+        },
+        {
+          "name": "Activity (30 days)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/stats/activity?days=30"
+          }
+        },
+        {
+          "name": "Hardest cards",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/stats/hardest?limit=10"
+          }
+        },
+        {
+          "name": "Forecast (14 days)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/stats/forecast?days=14"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Errors: database needed",
+      "item": [
+        {
+          "name": "404 not found (valid id, no such deck)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"message\", () => pm.expect(pm.response.json().message).to.eql(\"Deck not found\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/decks/000000000000000000000000"
+          }
+        },
+        {
+          "name": "400 delete subject that still has decks",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 400\", () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/subjects/{{subjectId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Errors: no database needed",
+      "item": [
+        {
+          "name": "400 create subject with empty body",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"message names the field\", () => pm.expect(pm.response.json().message).to.include(\"name\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": "{{baseUrl}}/api/subjects"
+          }
+        },
+        {
+          "name": "400 malformed id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"message\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid ID\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/subjects/not-an-id"
+          }
+        },
+        {
+          "name": "400 unknown field (scheduling fields are not editable)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"names the field\", () => pm.expect(pm.response.json().message).to.include(\"easeFactor\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deck\": \"000000000000000000000001\",\n  \"front\": \"F\",\n  \"back\": \"B\",\n  \"easeFactor\": 3\n}"
+            },
+            "url": "{{baseUrl}}/api/cards"
+          }
+        },
+        {
+          "name": "400 stats days out of range",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 400\", () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/stats/activity?days=0"
+          }
+        },
+        {
+          "name": "404 unknown route",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/does-not-exist"
+          }
+        }
+      ]
+    }
+  ]
+}

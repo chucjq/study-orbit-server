@@ -1,0 +1,36 @@
+{
+  "name": "study-orbit-server",
+  "version": "0.1.0",
+  "description": "Study Orbit REST API: spaced-repetition flashcards (Express + MongoDB Atlas + Mongoose, strict TypeScript)",
+  "main": "dist/server.js",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vitest run --passWithNoTests",
+    "seed": "tsx src/scripts/seed.ts"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "mongoose": "^9.11.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.4",
+    "eslint": "^10.12.0",
+    "prettier": "^3.9.9",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.1",
+    "vitest": "^5.0.3"
+  }
+}

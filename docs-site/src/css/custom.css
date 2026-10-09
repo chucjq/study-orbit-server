@@ -1,0 +1,21 @@
+/* Keep wide Mermaid diagrams scrollable instead of squeezing them. */
+.docusaurus-mermaid-container {
+  overflow-x: auto;
+  margin: 1.25rem 0;
+}
+
+.docusaurus-mermaid-container svg {
+  height: auto;
+}
+
+/* On narrow screens, keep diagrams at a readable width and scroll them sideways
+   rather than shrinking the text until it is too small to read. */
+@media (max-width: 996px) {
+  .docusaurus-mermaid-container svg {
+    min-width: 560px;
+  }
+}
+
+:root {
+  --ifm-code-font-size: 95%;
+}
