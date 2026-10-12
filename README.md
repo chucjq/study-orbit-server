@@ -4,15 +4,15 @@ REST API for **Study Orbit**, a spaced-repetition flashcard app. The server deci
 due, schedules the next review of each card with a self-implemented SM-2 algorithm, and derives
 study statistics.
 
-> Client repository: _add link_
+Client repository: https://github.com/justineetm/study-orbit-client
 
 Backend Documentation: https://chucjq.github.io/study-orbit-server/
 
 ## Group members
 
-- _Name 1 (backend)_
-- _Name 2_
-- _Name 3_
+- _Chu, Cyrus Justine Q._
+- _[Mercado, Justine Eduard T.](https://github.com/justineetm)_
+- _[Villanueva, Mark Rayshawn T.](https://github.com/NoNameNoTag404)_
 
 ## Concept
 
